@@ -59,7 +59,10 @@ module.exports = {
   },
   mode,
   plugins: [
-    new webpack.EnvironmentPlugin(['RPC_URL', 'NODE_ENV']),
+    new webpack.EnvironmentPlugin({
+      RPC_URL: '',
+      NODE_ENV: 'development',
+    }),
     new NodePolyfillPlugin(),
     new MiniCssExtractPlugin({
       filename: "[name].css",

@@ -20,7 +20,7 @@
   function getData() {
     try {
       const savedsession = window.localStorage.getItem(`NFT_REPO_SESSION${dataContents ? dataContents.cid : 'example'}`);
-      if (savedsession) {
+      if (savedsession && savedsession.length) {
         return JSON.parse(savedsession);
       }
       if (dataContents) {
@@ -49,13 +49,25 @@
     };
   };
 
+  function mintZora() {
+    alert('Please save to IPFS first');
+  }
+
+  function resetEdits() {
+    if (!confirm('Are you sure you wish to reset this editor to the template?')) {
+      return
+    }
+    window.localStorage.removeItem(`NFT_REPO_SESSION${dataContents ? dataContents.cid : 'example'}`);
+    repl.set(getData());
+  }
+
   async function handleIPFSClick() {
     const previewPage = document.querySelector('iframe[title="Result"]').contentDocument;
     const toSave = GeneratedPage
       .replace('{JSONEND}', SEPERATOR_STRING+JSON.stringify(window.currentEditor))
       .replace('{CONTENT}', previewPage.body.innerHTML)
       .replace('{SCRIPT}', pageScript)
-      .replace('{PAGE_TITLE}', '~ my gallery ~')
+      .replace('{PAGE_TITLE}', prompt("Name your masterpiece!"))
       .replace('{STYLES}', previewPage.getElementsByTagName('style')[0].innerHTML)
     console.log('saving page', toSave);
     const { cid } = await ipfsHandlerSavePage(toSave);
@@ -87,9 +99,11 @@
 <div style="height:100%">
   <div class="toolbar">
     <Pill disabled={true}>Edits saved locally</Pill>
+    <Pill buttonClick={resetEdits}>Reset edits</Pill>
     <Pill buttonClick={handleIPFSClick} disabled={false}>Save on IPFS</Pill>
-    <Pill disabled={false}>Mint on ZORA</Pill>
-    <Pill right={true} disabled={false}>WHAT IS THIS!</Pill>
+    <Pill disabled={false} buttonClick={mintZora}>Mint on ZORA</Pill>
+    <div style="flex: 1" />
+    <Pill buttonClick={() => navigateTo('/')} disabled={false}>WHAT IS THIS!</Pill>
   </div>
   <Repl
     bind:this={repl}
