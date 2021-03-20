@@ -89,6 +89,7 @@
     <Pill disabled={true}>Edits saved locally</Pill>
     <Pill buttonClick={handleIPFSClick} disabled={false}>Save on IPFS</Pill>
     <Pill disabled={false}>Mint on ZORA</Pill>
+    <Pill right={true} disabled={false}>WHAT IS THIS!</Pill>
   </div>
   <Repl
     bind:this={repl}
