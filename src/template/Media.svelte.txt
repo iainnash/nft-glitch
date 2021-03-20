@@ -2,6 +2,12 @@
 	export let common;
 	export let media;
 	export let info;
+	export let showLink = false;
+	
+	let video;
+	const togglePlay = () => {
+		(video.paused || video.ended) ? video.play() : video.pause();
+	}
 	
 	common && media && info; // Removes warning
 </script>
@@ -17,16 +23,25 @@
 	}
 	.video {
 		width: 100%;
+		cursor: pointer;
 	}
 </style>
 
-<div class="card">
-	{#if media.animation_url}
-	<video controls={true} class="video" src={media.animation_url}>
+<div class="card" data-nft={JSON.stringify({common, media})}>
+	{#if media.type.startsWith('video')}
+	<video loop on:click={togglePlay} bind:this={video} class="video" src={media.url}>
 		<track kind="captions" />
 	</video>
-	{:else if media.image_url}
-	<img alt="{media.title}" src={media.image_url} />
+	{:else if media.type.startsWith('text')}
+	text
+	{:else}
+		<img alt="{media.title}" src={media.url} />
 	{/if}
+	
 	{media.description}
+	
+		{#if showLink}
+		<p><a target="_blank" href={common.viewUrl}>view on {common.platform}</a></p>
+	{/if}
+	
 </div>
