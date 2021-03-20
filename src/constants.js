@@ -1,0 +1,1 @@
+export const SEPERATOR_STRING = '<!--NFT_DATA_EDITOR_SOURCE';

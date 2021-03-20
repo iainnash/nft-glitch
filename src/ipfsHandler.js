@@ -1,7 +1,3 @@
-import { NFTStorage, Blob } from "nft.storage";
-const token = process.env.NFT_STORE_KEY;
-console.log(token);
-const client = new NFTStorage({ token });
 
 export async function ipfsHandlerSavePage(pageContent) {
     const r = await fetch('/api/ipfs2', {
@@ -11,11 +7,8 @@ export async function ipfsHandlerSavePage(pageContent) {
         },
         body: JSON.stringify({
             data: pageContent,
-            title: ".",
+            name: ".",
         })
     });
-  const content = new Blob(['testing', pageContent]);
-  const cid = await client.storeBlob(content);
-  console.log(cid);
-  alert(cid);
+    return await r.json();
 }

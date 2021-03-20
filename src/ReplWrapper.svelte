@@ -1,27 +1,28 @@
 <script>
   import Repl from "@sveltejs/svelte-repl";
   import { onMount } from "svelte";
-  import {push} from 'svelte-spa-router'
+  import { navigateTo } from "svelte-router-spa";
 
-  
-  import MintButton from "./MintButton.svelte";
-  import NewLinkIcon from './NewLinkIcon.svelte';
-  import {ipfsHandlerSavePage} from './ipfsHandler';
-  import Pill from './Pill.svelte';
+  import {SEPERATOR_STRING} from './constants';
+  import { ipfsHandlerSavePage } from "./ipfsHandler";
+  import Pill from "./Pill.svelte";
 
   import App from "./template/App.svelte.txt";
   import backend from "./template/backend.js.txt";
   import Layout from "./template/Layout.svelte.txt";
   import Media from "./template/Media.svelte.txt";
 
-
   let repl;
+  export let dataContents;
 
   function getData() {
     try {
-      const savedsession = window.localStorage.getItem("NFT_REPO_SESSION");
+      const savedsession = window.localStorage.getItem(`NFT_REPO_SESSION${dataContents ? dataContents.cid : 'example'}`);
       if (savedsession) {
         return JSON.parse(savedsession);
+      }
+      if (dataContents) {
+        return dataContents.data;
       }
     } catch (_) {
       console.error("cannot load session");
@@ -33,13 +34,13 @@
         { type: "svelte", source: Layout, name: "Layout" },
         { type: "svelte", source: Media, name: "Media" },
         { type: "js", source: backend, name: "backend" },
-      ]
+      ],
     };
   }
 
   const debounce = (func, delay) => {
     let inDebounce;
-    return function(...args) {
+    return function (...args) {
       const context = this;
       clearTimeout(inDebounce);
       inDebounce = setTimeout(() => func.apply(context, args), delay);
@@ -47,34 +48,32 @@
   };
 
   async function handleIPFSClick() {
-    const html = document.querySelector('iframe[title="Result"]').contentDocument.body.innerHTML;
-    const {r} = await ipfsHandlerSavePage(html);
-    push(`/v/${r}`);
+    const html = document.querySelector('iframe[title="Result"]')
+      .contentDocument.body.innerHTML;
+    const toSave = html + SEPERATOR_STRING + JSON.stringify(window.currentEditor);
+    const { cid } = await ipfsHandlerSavePage(toSave);
+    navigateTo(`/v/${cid}`);
   }
 
   onMount(() => {
-    const debouncedUpdate = debounce(data => {
+    const debouncedUpdate = debounce((data) => {
       window.localStorage.setItem("NFT_REPO_SESSION", JSON.stringify(data));
     });
 
-    repl.$on("change", evt => {
+    repl.$on("change", (evt) => {
+      window.currentEditor = evt.detail;
       debouncedUpdate(evt.detail);
     });
-    repl.set(getData());
+    const windowData = getData();
+    window.currentEditor = windowData;
+    repl.set(windowData);
+    
   });
 </script>
 
-<style>
-  .toolbar {
-    display: flex;
-    background: #eee;
-    height: 40px;
-  }
-</style>
-
 <div style="height:100%">
   <div class="toolbar">
-    <Pill disabled={true}> Edits saved locally</Pill>
+    <Pill disabled={true}>Edits saved locally</Pill>
     <Pill buttonClick={handleIPFSClick} disabled={false}>Save on IPFS</Pill>
     <Pill disabled={false}>Mint on ZORA</Pill>
   </div>
@@ -83,7 +82,8 @@
     workersUrl="/workers"
     svelteUrl="https://unpkg.com/svelte@latest"
     rollupUrl="https://unpkg.com/rollup@1/dist/rollup.browser.js"
-    relaxed={true} />
+    relaxed={true}
+  />
 </div>
 <!-- 
 // export function makeApp(container) {
@@ -127,3 +127,11 @@
 //   app.set(getData());
 // }
  -->
+
+<style>
+  .toolbar {
+    display: flex;
+    background: #eee;
+    height: 40px;
+  }
+</style>
