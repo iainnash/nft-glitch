@@ -1,7 +1,6 @@
 <script>
   import { Zora } from "@zoralabs/zdk";
-  import { Wallet } from "ethers";
-  import { JsonRpcProvider } from "@ethersproject/providers";
+  import { Web3Provider, JsonRpcProvider } from "@ethersproject/providers";
   import {
     constructBidShares,
     constructMediaData,
@@ -14,8 +13,13 @@
   let provider = null;
 
   async function mint() {
+    setTimeout(doMint, 20);
+  }
+
+  async function doMint() {
     minting = true;
-    const zora = new Zora(wallet, 4);
+    console.log(provider.getSigner());
+    const zora = new Zora(provider.getSigner(), 4);
     const metadataJSON = generateMetadata("zora-20210101", {
       description: "",
       mimeType: "text/plain",
@@ -48,7 +52,7 @@
 
   async function connect() {
     await window.ethereum.enable();
-    provider = new ethers.providers.Web3Provider(window.ethereum);
+    provider = new Web3Provider(window.ethereum);
     provider.on("network", (newNetwork, oldNetwork) => {
         console.log({oldNetwork, newNetwork})
         // When a Provider makes its initial connection, it emits a "network"
@@ -58,12 +62,13 @@
             window.location.reload();
         }
     });
+    console.log(provider)
     
-    const signer = provider.getSigner();
+    // const signer = provider.getSigner();
   }
 </script>
 
-{#if provider != null}
+{#if provider}
   <button on:click={mint}>Mint!</button>
 {:else}
   <button on:click={connect}>Connect your Wallet</button>
