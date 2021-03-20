@@ -1,5 +1,6 @@
 <script>
     export let disabled;
+    export let buttonClick = () => {};
 </script>
 <style>
     span {
@@ -21,4 +22,4 @@
     }
 </style>
 
-<button disabled={disabled}><slot /></button>
+<button on:click={buttonClick} disabled={disabled}><slot /></button>

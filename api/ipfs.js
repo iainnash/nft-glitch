@@ -7,7 +7,7 @@ const pinata = pinataSDK(
 );
 
 module.exports = async (req, res) => {
-  const { data, name } = req.body;
+  const { data, name, author } = req.body;
   if (!data || !name) {
     return res.json({
       success: false,
@@ -19,7 +19,8 @@ module.exports = async (req, res) => {
   const readable = Readable.from(fileData);
   const pin = await pinata.pinFileToIPFS(readable, {
     pinataMetadata: {
-      name: json.name,
+      name: name,
+      author: author,
     },
   });
   return res.json({

@@ -1,7 +1,7 @@
-import Page from './Page.svelte';
+import Root from './Root.svelte';
 import './global.css';
 
-const app = new Page({
+const app = new Root({
     target: document.body,
     props: {}
 });

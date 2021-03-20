@@ -1,9 +1,12 @@
 <script>
   import Repl from "@sveltejs/svelte-repl";
   import { onMount } from "svelte";
+  import {push} from 'svelte-spa-router'
+
   
   import MintButton from "./MintButton.svelte";
   import NewLinkIcon from './NewLinkIcon.svelte';
+  import {ipfsHandlerSavePage} from './ipfsHandler';
   import Pill from './Pill.svelte';
 
   import App from "./template/App.svelte.txt";
@@ -43,8 +46,10 @@
     };
   };
 
-  function handleIPFSClick() {
-    alert('IPFS')
+  async function handleIPFSClick() {
+    const html = document.querySelector('iframe[title="Result"]').contentDocument.body.innerHTML;
+    const {r} = await ipfsHandlerSavePage(html);
+    push(`/v/${r}`);
   }
 
   onMount(() => {
@@ -63,14 +68,15 @@
   .toolbar {
     display: flex;
     background: #eee;
+    height: 40px;
   }
 </style>
 
-<div style="height:96%">
+<div style="height:100%">
   <div class="toolbar">
-    <Pill disabled={true} text="Edits saved locally" />
-    <Pill disabled={false} text="Save on IPFS" />
-    <Pill disabled={false} text="Mint on ZORA" />
+    <Pill disabled={true}> Edits saved locally</Pill>
+    <Pill buttonClick={handleIPFSClick} disabled={false}>Save on IPFS</Pill>
+    <Pill disabled={false}>Mint on ZORA</Pill>
   </div>
   <Repl
     bind:this={repl}
