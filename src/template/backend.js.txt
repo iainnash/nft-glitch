@@ -1,0 +1,419 @@
+const contracts = {
+  foundation: "0x3b3ee1931dc30c1957379fac9aba94d1c48a5405",
+  superrare: "0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0",
+  ethblockart: "0xb80fbf6cdb49c33dc6ae4ca11af8ac47b0b4c0f3",
+  zora: "0xabefbc9fd2f806065b4f3c237d4b59d9a97bcac7",
+  rarible: "0x60f80121c31a0d46b5279700f9df786054aa5ee5",
+};
+
+async function graphQlQuery(url, query, variables={}) {
+	const res = await fetch(url, {
+		method: 'POST',
+		headers: {'content-type': 'application/json'},
+		body: JSON.stringify({query, variables})
+	})
+	return (await res.json());
+}
+
+export function getMediaById(medias, id) {
+  return medias.find((media) => media.common.mediaId === id);
+}
+
+export async function getAssetMedias(assets) {
+  //{contractAddress, mediaId}
+  if (assets.length == 0) {
+    return {};
+  }
+  const result = await fetch(
+    `https://api.opensea.io/api/v1/assets?asset_contract_address=${
+      assets[0].contractAddress
+    }&${assets.map((a) => `token_ids=${a.mediaId}`).join("&")}`
+  );
+
+  const parsed = await result.json();
+  return parsed.assets.reduce((last, now) => {
+    last[now.token_id] = now;
+    return last;
+  }, {});
+}
+
+
+export async function getRaribleMedia(address, forCreator = true, size=30) {
+	const query = {"size":size,"filter":{"@type":forCreator?"by_creator":"by_owner","address":address}};
+	const response = await fetch('https://old-leaf-46dd.iain.workers.dev/rarible', {
+		method: 'POST',
+		headers: {'content-type': 'application/json'},
+		body: JSON.stringify(query),
+	});
+	const res = await response.json();
+	return res.map((item) => ({
+		info: item,
+		common: {
+			type: 'rarible',
+			contractAddress: item.item.token,
+			tokenId: item.item.tokenId,
+		},
+		media: {
+			animation: {
+				type: item.meta.animationMeta && item.meta.animationMeta.type,
+				url: item.properties.animationUrl
+			},
+			image: {
+				type: item.meta.imageMeta,
+				url: item.properties.image,
+			},
+			name: item.properties.name,
+			description: item.properties.description,
+		}
+	}));
+}
+
+export async function getFoundationMedia(address, forCreator = true) {
+  const foundationAPI = "https://api.thegraph.com/subgraphs/name/f8n/fnd";
+  const apiResult = await fetch(foundationAPI, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      query: `query getAccountArtworks($publicKey: String!) {
+  ${!forCreator ? `artworksOwned: nfts(
+    where: {owner: $publicKey, owner_not: "0x0000000000000000000000000000000000000000"}
+  ) {
+    ...NftExtendedFragment
+  }` : `
+  artworksMinted: nfts(
+    where: {creator: $publicKey, owner_not: "0x0000000000000000000000000000000000000000"}
+  ) {
+    ...NftExtendedFragment
+  }`}
+}
+
+fragment NftExtendedFragment on Nft {
+  ...NftFragment
+  auctions {
+    ...AuctionFragment
+  }
+  mostRecentAuction {
+    ...AuctionFragment
+    bids {
+      ...BidFragment
+    }
+    highestBid {
+      ...BidFragment
+    }
+  }
+}
+
+fragment NftFragment on Nft {
+  id
+  tokenId
+  isPrimarySale
+  dateMinted
+  nftContract {
+    baseURI
+    symbol
+    id
+  }
+  mintedTransfer {
+    transactionHash
+  }
+  creator {
+    id
+    account {
+      id
+    }
+  }
+  owner {
+    id
+  }
+  owner {
+    id
+  }
+  transfers(orderBy: dateTransferred, orderDirection: desc, first: 1) {
+    from {
+      id
+    }
+    to {
+      id
+    }
+  }
+  bids(orderBy: amountInETH, orderDirection: desc) {
+    id
+    nft {
+      id
+      tokenId
+    }
+    bidder {
+      id
+    }
+    amountInETH
+    datePlaced
+    status
+    seller {
+      id
+    }
+    transactionHashPlaced
+  }
+}
+
+fragment AuctionFragment on NftMarketAuction {
+  id
+  auctionId
+  duration
+  status
+  reservePriceInETH
+  dateEnding
+  dateStarted
+  dateCreated
+  transactionHashCreated
+}
+
+fragment BidFragment on NftMarketBid {
+  amountInETH
+  status
+  datePlaced
+  bidder {
+    id
+  }
+}
+`,
+      variables: {
+        publicKey: address.toLowerCase(),
+      },
+    }),
+  });
+  const res = (await apiResult.json()).data[forCreator ? 'artworksMinted' : 'artworksOwned'];
+  const bc = res.map((i) => ({
+    info: i,
+    common: {
+      contractAddress: contracts.foundation,
+      mediaId: i.tokenId,
+      platform: "foundation",
+    },
+  }));
+
+  const medias = await getAssetMedias(bc.map((media) => media.common));
+
+  return bc.map((m) => ({
+    ...m,
+    media: medias[m.common.mediaId],
+  }));
+}
+
+export async function getZoraMedia(address) {
+  const zoraAPI = "https://api.thegraph.com/subgraphs/name/ourzora/zora-v1";
+	
+  const result = await graphQlQuery(zoraAPI, `
+      {
+  medias(where:{
+    creator:"${address}",
+  }) {
+    id
+    metadataURI
+    contentURI
+    contentHash
+    metadataHash
+    owner {
+      id
+    }
+    ownerBidShare
+    creator {
+      id
+    }
+    creatorBidShare
+    prevOwner {
+      id
+    }
+    prevOwnerBidShare
+    approved {
+      id
+    }
+    currentBids {
+      id
+    }
+    currentAsk {
+      id
+    }
+    createdAtTimestamp
+    createdAtBlockNumber
+  }
+}
+      `);
+
+	
+	const query = `
+		query getMedia {
+			${result.data.medias.map(m => `
+				media${m.id}: getMedia(id: "${m.id}") {
+				...MediaFragment
+				version
+				mediaType
+				metadata {
+					version
+					name
+					description
+					mimeType
+				}
+				content {
+					low
+					medium
+					high
+					thumbnail
+					stream
+				}
+				ownerProfile {
+					...UserFragment
+				}
+				creatorProfile {
+					...UserFragment
+				}
+			}
+			`).join("\n")}
+	}
+
+fragment MediaFragment on Media {
+  id
+  metadataURI
+  contentURI
+  contentHash
+  metadataHash
+  ownerBidShare
+  creatorBidShare
+  prevOwnerBidShare
+  creator {
+    id
+  }
+  owner {
+    id
+  }
+  prevOwner {
+    id
+  }
+  approved {
+    id
+  }
+  currentBids {
+    ...BidFragment
+  }
+  currentAsk {
+    ...AskFragment
+  }
+  inactiveBids {
+    ...InactiveBidFragment
+  }
+  inactiveAsks {
+    ...InactiveAskFragment
+  }
+  createdAtTimestamp
+  createdAtBlockNumber
+  burnedAtTimeStamp
+  burnedAtBlockNumber
+}
+
+fragment BidFragment on Bid {
+  id
+  currency {
+    ...CurrencyFragment
+  }
+  media {
+    id
+  }
+  amount
+  sellOnShare
+  bidder {
+    id
+  }
+  recipient {
+    id
+  }
+  createdAtTimestamp
+  createdAtBlockNumber
+}
+
+fragment CurrencyFragment on Currency {
+  id
+  decimals
+  symbol
+  liquidity
+}
+
+fragment InactiveBidFragment on InactiveBid {
+  id
+  currency {
+    ...CurrencyFragment
+  }
+  type
+  media {
+    id
+  }
+  amount
+  sellOnShare
+  bidder {
+    id
+  }
+  recipient {
+    id
+  }
+  createdAtTimestamp
+  createdAtBlockNumber
+  inactivatedAtTimestamp
+  inactivatedAtBlockNumber
+}
+
+fragment AskFragment on Ask {
+  id
+  amount
+  currency {
+    ...CurrencyFragment
+  }
+  owner {
+    id
+  }
+  createdAtTimestamp
+  createdAtBlockNumber
+}
+
+fragment InactiveAskFragment on InactiveAsk {
+  id
+  amount
+  type
+  currency {
+    ...CurrencyFragment
+  }
+  owner {
+    id
+  }
+  createdAtTimestamp
+  createdAtBlockNumber
+  inactivatedAtTimestamp
+  inactivatedAtBlockNumber
+}
+
+fragment UserFragment on ZoraUser {
+  address
+  bio
+  name
+  profileImageAsset
+  username
+  website
+  verified
+}
+	`;
+	
+	const mediaZora = await graphQlQuery('https://old-leaf-46dd.iain.workers.dev/zora', query);
+
+  const zoraMedias = result.data.medias.map((media) => ({
+    info: mediaZora.data[`media${media.id}`],
+    common: {
+      contractAddress: contracts.zora,
+      mediaId: media.id,
+      platform: "zora",
+    },
+  }));
+
+  const medias = await getAssetMedias(zoraMedias.map((media) => media.common));
+
+   return zoraMedias.map((m) => ({
+     ...m,
+     media: medias[m.common.mediaId],
+   }));
+}

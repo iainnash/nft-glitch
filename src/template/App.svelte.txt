@@ -1,0 +1,55 @@
+<script>
+  import Media from './Media.svelte';
+  import Layout from './Layout.svelte';
+  import {getZoraMedia, getRaribleMedia, getFoundationMedia, getMediaById} from './backend.js';
+  
+  let address = "0xa74cf67d26a19544235faa8611e672551ca3d450";
+  let foundationAddress = "0x464fEA246F3aFfc66992505202d649923722912a";
+</script>
+
+<style>
+  :global(body) {
+    background: #eee;
+    color: #333;
+		
+  }
+</style>
+
+<Layout twitter="isiain" name="cabbage" footer="made with ❣️ worldwide 🌍">
+{#await getRaribleMedia("0x8e288c8a67f266d5c8b95bf5c4c02f9bf25e55bc")}
+	....
+	{:then medias}
+	  {#each medias as media}
+			<Media {...media} />
+		{/each}
+	{/await}
+  <h1>ZORA</h1>
+  {#await getZoraMedia(address)}
+    <p>
+      loading...
+  </p>
+  {:then medias}
+
+  My favorite is:
+      <Media {...getMediaById(medias, "1666")} />
+
+  <h2>
+    All creations:
+  </h2>
+    {#each medias as media}
+      <Media {...media} />
+    {/each}
+  {/await}
+
+  <h1>
+    Foundation
+  </h1>
+  {#await getFoundationMedia(foundationAddress)}
+    <p>loading...</p>
+  {:then medias}
+    <h2>All creations:</h2>
+    {#each medias as media}
+      <Media showLink={true} {...media} />
+    {/each}
+  {/await}
+</Layout>

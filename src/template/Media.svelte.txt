@@ -1,0 +1,32 @@
+<script>
+	export let common;
+	export let media;
+	export let info;
+	
+	common && media && info; // Removes warning
+</script>
+
+<style>
+	.card {
+		background: #fff;
+		padding: 14px;
+		margin: 24px;
+		border-radius: 10px;
+		color: #222;
+		position: relative;
+	}
+	.video {
+		width: 100%;
+	}
+</style>
+
+<div class="card">
+	{#if media.animation_url}
+	<video controls={true} class="video" src={media.animation_url}>
+		<track kind="captions" />
+	</video>
+	{:else if media.image_url}
+	<img alt="{media.title}" src={media.image_url} />
+	{/if}
+	{media.description}
+</div>

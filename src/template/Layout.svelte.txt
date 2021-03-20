@@ -1,0 +1,32 @@
+<script>
+  export let name;
+  export let twitter;
+	export let footer;
+</script>
+
+<style>
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+  }
+  header a {
+    padding: 6px;
+    color: #eee;
+  }
+  footer {
+    padding: 20px;
+  }
+</style>
+
+<div>
+  <header>
+    <h3>hi i'm {name}</h3>
+    <span>
+      <a href="https://twitter.com/{twitter}">twitter</a>
+    </span>
+  </header>
+  <slot />
+  <footer>{footer}</footer>
+</div>
