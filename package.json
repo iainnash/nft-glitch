@@ -21,6 +21,7 @@
         "@sveltejs/svelte-repl": "^0.2.1",
         "@zoralabs/zdk": "^1.0.7",
         "ethers": "^5.0.32",
+        "isomorphic-fetch": "^3.0.0",
         "nft.storage": "^0.3.8",
         "node-polyfill-webpack-plugin": "^1.0.3",
         "svelte-router-spa": "^6.0.0"

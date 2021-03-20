@@ -27,12 +27,13 @@
     bringing them back for the new internet rennisance
   </p>
   <p>
-    this project brings back those vibes for web 3.0. make a gallery of your
-    favorite NFT media super easily, and publish the gallery as an IPFS page.
-    the page itself is saved where it can update if possible but will preserve
-    the content of the page on IPFS indefinitely. if you want to take your
-    archive to the next level, you can mint it on ZORA to preserve it as a
-    NodeFilter.
+    this project brings back those vibes for web 3.0. write some html(ish) and styles to show off your works in your own style.
+    the platform is <sup>f</sup>re<sub>e</sub> and outputs decentralized webpages that live on IPFS.
+    want to take your gallery to the next level? you can put it on zora!
+  </p>
+  <p>
+    we currently support either purchased or created media from foundation, rarible, opensea, and zora.
+    client-side async fetch() is supported for adding your own data sources.
   </p>
 
   <h3>how do i get started!</h3>
@@ -54,7 +55,7 @@
         {/each}
       </ul>
     </div>
-    <div>
+    <div class="desc">
 <h4>media description object</h4>
     <pre
       class="block">{`
@@ -79,6 +80,9 @@
 </div>
 
 <style>
+  .desc {
+    font-size: 1.35em;
+  }
   .examples {
     margin-left: 20px;
     padding: 2px;
@@ -146,6 +150,6 @@
     -webkit-text-fill-color: transparent;
   }
   h2 {
-    font-size: 20vw;
+    font-size: 16vw;
   }
 </style>

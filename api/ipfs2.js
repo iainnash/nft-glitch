@@ -2,7 +2,7 @@ const {NFTStorage, Blob } = require("nft.storage");
 const token = process.env.NFT_STORE_KEY;
 const client = new NFTStorage({ token });
 
-export async function ipfsHandlerSavePage(pageContent) {
+async function ipfsHandlerSavePage(pageContent) {
   const content = new Blob([pageContent]);
   const cid = await client.storeBlob(content);
   return cid;

@@ -18,7 +18,7 @@
 
   let name;
   let description;
-  let creatorShare;
+  let creatorShare = 10;
   export let htmlHash;
 
   async function doMint() {
@@ -30,6 +30,7 @@
       header: {
         "content-type": "application/json",
       },
+      method: 'POST',
       body: JSON.stringify({
         name,
         description,
@@ -41,6 +42,7 @@
     const zora = new Zora(provider.getSigner(), 4);
 
     if (!metaResponse.isVerified) {
+      alert('internal verification error ~~ sad');
       throw new Error("NOT VERIFIED");
     }
 
@@ -102,7 +104,6 @@
           min="0"
           max="30"
           step="1"
-          value="10"
           type="range"
         />
       </label>
