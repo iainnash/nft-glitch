@@ -43,7 +43,7 @@ export async function getAssetMedias(assets) {
   }, {});
 }
 
-export async function getAssetMedias(assetIds) {
+export async function getGenericAssets(assetIds) {
   const result = await fetch(
     `https://api.opensea.io/api/v1/assets?asset_contract_address=${
       assets[0].contractAddress

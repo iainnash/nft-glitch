@@ -7,7 +7,7 @@
 <div class="page">
   <p>
     Woah :o check out this masterpice.
-    <MintButton />
+    <MintButton htmlHash={cid} />
   </p>
 
   <iframe
