@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>{PAGE_TITLE}</title>
+    <style>{STYLES}</style>
+</head>
+<body>
+    {CONTENT}
+    <script type="text/javascript">
+        {SCRIPT}
+    </script>
+</body>
+</html>
+<!--{JSONEND}

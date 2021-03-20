@@ -11,9 +11,11 @@
   import backend from "./template/backend.js.txt";
   import Layout from "./template/Layout.svelte.txt";
   import Media from "./template/Media.svelte.txt";
+  import GeneratedPage from './template/GeneratedPage.html.txt';
 
   let repl;
   export let dataContents;
+  let pageScript;
 
   function getData() {
     try {
@@ -48,9 +50,14 @@
   };
 
   async function handleIPFSClick() {
-    const html = document.querySelector('iframe[title="Result"]')
-      .contentDocument.body.innerHTML;
-    const toSave = html + SEPERATOR_STRING + JSON.stringify(window.currentEditor);
+    const previewPage = document.querySelector('iframe[title="Result"]').contentDocument;
+    const toSave = GeneratedPage
+      .replace('{JSONEND}', SEPERATOR_STRING+JSON.stringify(window.currentEditor))
+      .replace('{CONTENT}', previewPage.body.innerHTML)
+      .replace('{SCRIPT}', pageScript)
+      .replace('{PAGE_TITLE}', '~ my gallery ~')
+      .replace('{STYLES}', previewPage.getElementsByTagName('style')[0].innerHTML)
+    console.log('saving page', toSave);
     const { cid } = await ipfsHandlerSavePage(toSave);
     navigateTo(`/v/${cid}`);
   }
@@ -67,6 +74,12 @@
     const windowData = getData();
     window.currentEditor = windowData;
     repl.set(windowData);
+
+    document.querySelector('iframe[title="Result"]').contentWindow.addEventListener('message', (event) => {
+      if (event.data.action === 'eval') {
+        pageScript = event.data.args.script;
+      }
+    })
     
   });
 </script>

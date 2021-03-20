@@ -1,5 +1,6 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
+const webpack = require('webpack');
 const path = require("path");
 
 const mode = process.env.NODE_ENV || "development";
@@ -58,6 +59,7 @@ module.exports = {
   },
   mode,
   plugins: [
+    new webpack.EnvironmentPlugin(['RPC_URL', 'NODE_ENV']),
     new NodePolyfillPlugin(),
     new MiniCssExtractPlugin({
       filename: "[name].css",
