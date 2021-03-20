@@ -17,6 +17,7 @@
         "dev": "webpack serve --content-base public"
     },
     "dependencies": {
+        "@pinata/sdk": "^1.1.13",
         "@sveltejs/svelte-repl": "^0.2.1",
         "@zoralabs/zdk": "^1.0.7",
         "ethers": "^5.0.32",

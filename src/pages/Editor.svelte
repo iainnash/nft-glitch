@@ -1,5 +1,6 @@
 <script>
   import { onMount } from "svelte";
+  import { SEPERATOR_STRING } from "../constants";
 
   import ReplWrapper from "../ReplWrapper.svelte";
   export let currentRoute;
@@ -11,8 +12,11 @@
       if (currentRoute.namedParams.cid) {
         const page = await fetch(`https://ipfs.io/ipfs/${cid}`);
         const responseText = await page.text();
-        const pageData = responseText.slice(responseText.indexOf("<!--SITE_SOURCE_TOKEN---"));
-        data = {cid, data: JSON.parse(pageData)};
+        const marker = "<!--" + SEPERATOR_STRING;
+        const pageData = responseText.slice(
+          responseText.indexOf(marker) + marker.length
+        );
+        data = { cid, data: JSON.parse(pageData) };
       }
     } catch (err) {
       console.error(err);

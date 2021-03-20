@@ -58,6 +58,7 @@
       return
     }
     window.localStorage.removeItem(`NFT_REPO_SESSION${dataContents ? dataContents.cid : 'example'}`);
+    window.location.reload();
     repl.set(getData());
   }
 
@@ -92,6 +93,12 @@
         pageScript = event.data.args.script;
       }
     })
+
+    if (window && window.location.hostname === 'localhost') {
+      try{
+      document.querySelector('#backend.draggable').display = 'none';
+      }catch(_){}
+    }
     
   });
 </script>
