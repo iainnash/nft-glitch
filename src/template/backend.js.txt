@@ -6,6 +6,10 @@ const contracts = {
   rarible: "0x60f80121c31a0d46b5279700f9df786054aa5ee5",
 };
 
+async function resolveAddress() {
+	
+}
+
 async function graphQlQuery(url, query, variables={}) {
 	const res = await fetch(url, {
 		method: 'POST',
@@ -37,7 +41,6 @@ export async function getAssetMedias(assets) {
   }, {});
 }
 
-
 export async function getRaribleMedia(address, forCreator = true, size=30) {
 	const query = {"size":size,"filter":{"@type":forCreator?"by_creator":"by_owner","address":address}};
 	const response = await fetch('https://old-leaf-46dd.iain.workers.dev/rarible', {
@@ -46,26 +49,25 @@ export async function getRaribleMedia(address, forCreator = true, size=30) {
 		body: JSON.stringify(query),
 	});
 	const res = await response.json();
-	return res.map((item) => ({
+	
+	const ret= res.map((item) => ({
 		info: item,
 		common: {
 			type: 'rarible',
 			contractAddress: item.item.token,
 			tokenId: item.item.tokenId,
+			viewUrl: `https://rarible.com/token/${item.item.token}:${item.item.tokenId}`,
 		},
 		media: {
-			animation: {
-				type: item.meta.animationMeta && item.meta.animationMeta.type,
-				url: item.properties.animationUrl
-			},
-			image: {
-				type: item.meta.imageMeta,
-				url: item.properties.image,
-			},
+			url: item.meta.animationMeta ? item.properties.animationUrl : item.properties.imageBig,
+			previewURL: item.properties.imagePreview,
+			type: item.meta.animationMeta ? item.meta.animationMeta.type :  item.meta.imageMeta.type,
 			name: item.properties.name,
 			description: item.properties.description,
 		}
 	}));
+	console.log('res', ret);
+	return ret;
 }
 
 export async function getFoundationMedia(address, forCreator = true) {
@@ -191,12 +193,79 @@ fragment BidFragment on NftMarketBid {
     },
   }));
 
-  const medias = await getAssetMedias(bc.map((media) => media.common));
+	const query = `query hasuraArtworksByTokenIds($tokenIds: [Int!]!, $excludeHidden: Boolean!, $moderationStatuses: [artwork_moderationstatus_enum!], $userModerationStatuses: [user_moderationstatus_enum!]) {
+  artworks: artwork(
+    where: {tokenId: {_in: $tokenIds}, deletedAt: {_is_null: true}, moderationStatus: {_in: $moderationStatuses}, user: {moderationStatus: {_in: $userModerationStatuses}}, _or: [{_and: [{hiddenAt: {_is_null: true}}, {user: {hiddenAt: {_is_null: true}}}]}, {_or: [{_and: [{hiddenAt: {_is_null: $excludeHidden}}, {user: {hiddenAt: {_is_null: true}}}]}, {_and: [{hiddenAt: {_is_null: true}}, {user: {hiddenAt: {_is_null: $excludeHidden}}}]}, {_and: [{hiddenAt: {_is_null: $excludeHidden}}, {user: {hiddenAt: {_is_null: $excludeHidden}}}]}]}]}
+  ) {
+    ...HasuraArtworkFragment
+    creator: user {
+      ...HasuraUserFragment
+    }
+  }
+}
 
-  return bc.map((m) => ({
-    ...m,
-    media: medias[m.common.mediaId],
-  }));
+fragment HasuraArtworkFragment on artwork {
+  id
+  name
+  description
+  assetIPFSPath
+  metadataIPFSPath
+  width
+  height
+  duration
+  mimeType
+  mintTxHash
+  muxStatus
+  muxMaxResolution
+  muxPlaybackId
+  mintTxHash
+  muxId
+  tokenId
+  status
+  hiddenAt
+  deletedAt
+  moderationStatus
+}
+
+fragment HasuraUserFragment on user {
+  userIndex
+  publicKey
+  username
+  name
+  firstName
+  lastName
+  isAdmin
+  bio
+  coverImageUrl
+  profileImageUrl
+  isApprovedCreator
+  moderationStatus
+  links
+}
+`
+	const mediaFoundation = await graphQlQuery('https://old-leaf-46dd.iain.workers.dev/foundation', query, {
+		excludeHidden: false,
+		moderationStatuses: ["ACTIVE"],
+		tokenIds: bc.map(t => parseInt(t.common.mediaId)),
+		userModerationStatuses: ["ACTIVE"],
+	});
+  
+	// TODO: add url here
+	const updateMedia = (last, item) => ({
+		info: item,
+		media: {
+			description: item.description,
+			name: item.name,
+			type: item.mimeType,
+			url: `https://f8n-ipfs-production.imgix.net/${item.assetIPFSPath}?auto=format`
+		},
+		common: {
+			...last.common,
+			viewUrl: `https://foundation.app/${item.creator.username}/${item.name.toLowerCase().replace(/[^a-z]/g, '')}-${item.tokenId}`,
+		},
+	});
+
+  return bc.map((m) => updateMedia(m, mediaFoundation.data.artworks.find((mk) => mk.tokenId.toString() === m.common.mediaId)));
 }
 
 export async function getZoraMedia(address) {
@@ -401,19 +470,32 @@ fragment UserFragment on ZoraUser {
 	
 	const mediaZora = await graphQlQuery('https://old-leaf-46dd.iain.workers.dev/zora', query);
 
-  const zoraMedias = result.data.medias.map((media) => ({
-    info: mediaZora.data[`media${media.id}`],
+  const zoraMedias = result.data.medias.map((media) => {
+		const info = mediaZora.data[`media${media.id}`];
+		return {
+    info,
     common: {
       contractAddress: contracts.zora,
       mediaId: media.id,
       platform: "zora",
-    },
-  }));
+			viewUrl: `https://zora.co/${info.creatorProfile.username}/${info.id}`
+    }
+  };
+	});
 
-  const medias = await getAssetMedias(zoraMedias.map((media) => media.common));
+  //const medias = await getAssetMedias(zoraMedias.map((media) => media.common));
 
-   return zoraMedias.map((m) => ({
+   return zoraMedias.map((m) => {
+		 const media = mediaZora.data[`media${m.common.mediaId}`];
+		 console.log(media)
+		 return {
      ...m,
-     media: medias[m.common.mediaId],
-   }));
+     media: {
+				type: media.metadata.mimeType,
+			 name: media.metadata.name,
+			 description: media.metadata.description,
+			 url: media.contentURI,
+		 },
+   };
+	 });
 }

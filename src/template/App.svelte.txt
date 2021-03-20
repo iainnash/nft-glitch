@@ -3,8 +3,10 @@
   import Layout from './Layout.svelte';
   import {getZoraMedia, getRaribleMedia, getFoundationMedia, getMediaById} from './backend.js';
   
+	// demo addresses
   let address = "0xa74cf67d26a19544235faa8611e672551ca3d450";
   let foundationAddress = "0x464fEA246F3aFfc66992505202d649923722912a";
+	let raribleAddress = "0x8e288c8a67f266d5c8b95bf5c4c02f9bf25e55bc";
 </script>
 
 <style>
@@ -16,8 +18,8 @@
 </style>
 
 <Layout twitter="isiain" name="cabbage" footer="made with ❣️ worldwide 🌍">
-{#await getRaribleMedia("0x8e288c8a67f266d5c8b95bf5c4c02f9bf25e55bc")}
-	....
+{#await getRaribleMedia(raribleAddress)}
+	 loading
 	{:then medias}
 	  {#each medias as media}
 			<Media {...media} />
@@ -31,7 +33,7 @@
   {:then medias}
 
   My favorite is:
-      <Media {...getMediaById(medias, "1666")} />
+      <Media showLink={true} {...getMediaById(medias, "1666")} />
 
   <h2>
     All creations:
