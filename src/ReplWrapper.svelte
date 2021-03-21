@@ -77,7 +77,7 @@
 
   onMount(() => {
     const debouncedUpdate = debounce((data) => {
-      window.localStorage.setItem("NFT_REPO_SESSION", JSON.stringify(data));
+      window.localStorage.setItem(`NFT_REPO_SESSION${dataContents ? dataContents.cid : 'example'}`, JSON.stringify(data));
     });
 
     repl.$on("change", (evt) => {

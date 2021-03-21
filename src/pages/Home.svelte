@@ -2,11 +2,11 @@
   import { Navigate } from "svelte-router-spa";
 
   let templates = [
-    ["", "for a foundation gallery"],
-    ["", "for a rarible gallery"],
-    ["", "with opensea"],
-    ["", "flatuance nft example"],
-    ["", "a kitchen sink gallery"],
+    ["bafkreic4uu7m35po6tl25kkfetsphs7o5dbmsx7ybo7w623qtgxsxdinb4", "foundation page as jstn hires theme"],
+    ["bafkreifb2trdatysz2ppnaob6zevvjkul453tic3xgqbu735v6k6h6cwvi", "flatuance opensea nft example"],
+    ["bafkreibzenjj2htnfr2drromgbojeshf6n3z4744zhkyvqwzb4rpyw7aly", "a kitchen sink gallery"],
+    ["", "foundation as a zora gallery"],
+    ["", "zora as a foundation gallery"],
   ];
 </script>
 

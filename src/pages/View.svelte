@@ -3,4 +3,4 @@
     export let currentRoute;
 </script>
 
-<PreviewPage cid={currentRoute.namedParams.cid} />
+<PreviewPage buy={false} cid={currentRoute.namedParams.cid} />

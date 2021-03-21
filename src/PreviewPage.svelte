@@ -2,17 +2,20 @@
   import MintButton from './MintButton.svelte';
 
   export let cid;
+  export let buy;
 </script>
 
 <div class="page">
+  {#if buy}
   <p>
     Woah :o check out this masterpice.
     <MintButton htmlHash={cid} />
   </p>
+  {/if}
 
   <iframe
-    width="98%"
-    height="93%"
+    width="{buy ? '98%' : '100%'}"
+    height="{buy ? '93%' : '100%'}"
     class="frame"
     title="Site preview"
     src="https://ipfs.io/ipfs/{cid}">loading...</iframe

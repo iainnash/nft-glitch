@@ -19,6 +19,7 @@
   let name;
   let description;
   let creatorShare = 10;
+  let network;
   export let htmlHash;
 
   async function doMint() {
@@ -27,7 +28,7 @@
     console.log(provider.getSigner());
 
     const metaHash = await fetch("/api/mint-setup", {
-      header: {
+      headers: {
         "content-type": "application/json",
       },
       method: 'POST',
@@ -41,10 +42,10 @@
 
     const zora = new Zora(provider.getSigner(), 4);
 
-    if (!metaResponse.isVerified) {
-      alert('internal verification error ~~ sad');
-      throw new Error("NOT VERIFIED");
-    }
+    // if (!metaResponse.isVerified) {
+    //   alert('internal verification error ~~ sad');
+    //   throw new Error("NOT VERIFIED");
+    // }
 
     const bidShares = constructBidShares(
       10, // creator share
@@ -54,6 +55,8 @@
     const tx = await zora.mint(metaResponse.mediaData, bidShares);
     tx.wait(8).then((a) => {
       console.log(a);
+      console.log(tx);
+      debugger
       minting = false;
     }); // 8 confirmations to finalize
   }
@@ -63,6 +66,7 @@
     provider = new Web3Provider(window.ethereum);
     console.log("address", await provider.getSigner().getAddress());
     provider.on("network", (newNetwork, oldNetwork) => {
+      network = newNetwork;
       console.log({ oldNetwork, newNetwork });
       // When a Provider makes its initial connection, it emits a "network"
       // event with a null oldNetwork along with the newNetwork. So, if the
@@ -82,7 +86,7 @@
     <p>
       <label>
         <span class="txt">title</span>
-        <input bind:value={name} placeholder="piece name" type="text" />
+        <input disabled={minting} bind:value={name} placeholder="piece name" type="text" />
       </label>
     </p>
     <p>
@@ -91,6 +95,7 @@
         <input
           bind:value={description}
           placeholder="your description"
+          disabled={minting}
           type="text"
         />
       </label>
@@ -103,18 +108,32 @@
           placeholder="creator share"
           min="0"
           max="30"
+          disabled={minting}
           step="1"
           type="range"
         />
       </label>
     </p>
-    <button on:click={mint}>Mint!</button>
+    {#if minting}
+      minting...
+    {:else}
+      <button on:click={mint}>Mint!</button>
+    {/if}
   </div>
 {:else}
   <button on:click={connect}>Connect your Wallet</button>
 {/if}
 
 <style>
+  .main {
+    font-size: 0.8em;
+  }
+  button {
+    border: 1px #999 solid;
+    border-radius: 4px;
+    padding: 3px;
+    margin: 10px;
+  }
   .txt {
     display: inline-block;
     width: 100px;

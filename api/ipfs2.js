@@ -9,6 +9,7 @@ async function ipfsHandlerSavePage(pageContent) {
 }
 
 module.exports = async (req, res) => {
+  console.log('TOKEN', token);
     const { data, name } = req.body;
     if (!data || !name) {
       return res.json({
@@ -17,6 +18,7 @@ module.exports = async (req, res) => {
       });
     }
   
+    console.log('has data len', data.length);
     const r = await ipfsHandlerSavePage(data);
     return res.json({
       success: true,

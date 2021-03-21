@@ -12,6 +12,8 @@
 
 <style>
   .full {
+    text-align: center;
+    margin-top: 20px;
     min-height: 100%;
     font-size: 1.9em;
   }

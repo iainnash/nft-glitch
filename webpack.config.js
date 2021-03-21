@@ -62,6 +62,9 @@ module.exports = {
     new webpack.EnvironmentPlugin({
       RPC_URL: '',
       NODE_ENV: 'development',
+      PINATA_API_KEY: '',
+      PINATA_API_SECRET: '',
+      NFT_STORE_KEY: '',
     }),
     new NodePolyfillPlugin(),
     new MiniCssExtractPlugin({

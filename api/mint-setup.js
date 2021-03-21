@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
   const page = await fetch(`https://ipfs.io/ipfs/${htmlHash}`);
 
   const metadataJSON = generateMetadata("zora-20210101", {
-    description,
+    description: [description, `View page: https://ipfs.io/ipfs/${htmlHash}`].join("\n"),
     mimeType: "text/html",
     name,
     version: "zora-20210101",
