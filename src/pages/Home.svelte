@@ -52,7 +52,7 @@
   <h3>what is this ~~</h3>
   <p>
     tumblr, myspace, and geocities pioneered freewheeling galleries, we're
-    bringing them back for the new internet rennisance
+    bringing them back for web 3.0
   </p>
   <p>
     this project brings back those vibes for web 3.0. write some html(ish) and
