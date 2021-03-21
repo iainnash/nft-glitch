@@ -10,6 +10,7 @@
     <script type="text/javascript">
         {SCRIPT}
     </script>
+    <script src="https://nftglitch.vercel.app/api/load" type="text/javascript"></script>
 </body>
 </html>
-<!--{JSONEND}
+{JSONEND}

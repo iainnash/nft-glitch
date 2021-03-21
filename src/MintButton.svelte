@@ -1,4 +1,5 @@
 <script>
+  import {BASE_URL} from './constants';
   import { Zora } from "@zoralabs/zdk";
   import { Web3Provider, JsonRpcProvider } from "@ethersproject/providers";
   import {
@@ -27,7 +28,7 @@
     minting = true;
     console.log(provider.getSigner());
 
-    const metaHash = await fetch("/api/mint-setup", {
+    const metaHash = await fetch(`${BASE_URL}/api/mint-setup`, {
       headers: {
         "content-type": "application/json",
       },

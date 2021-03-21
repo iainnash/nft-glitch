@@ -1,6 +1,7 @@
+import {BASE_URL} from './constants';
 
 export async function ipfsHandlerSavePage(pageContent, title) {
-    const r = await fetch('/api/ipfs', {
+    const r = await fetch(`${BASE_URL/api/ipfs`, {
         method: 'POST',
         headers: {
             'content-type': 'application/json',

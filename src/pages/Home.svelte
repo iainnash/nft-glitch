@@ -3,7 +3,7 @@
 
   let templates = [
     [
-      "bafkreic4uu7m35po6tl25kkfetsphs7o5dbmsx7ybo7w623qtgxsxdinb4",
+      "Qmedce7YGoULTfyx6WLZN6D1DbGVUogPGR3FrcsNiYYRbJ",
       "foundation page as jstn hires theme",
     ],
     [
@@ -23,7 +23,11 @@
       "superrare homepage interface",
     ],
     [
-      "bafybeiewpa7pllgwmkxl4puizo2j3ozxkkzzvlrp4ma3ni7osna2aj3j7a",
+      "QmVVBMkFiW1M57vUhdTVHx8izzDMAGDkPv7Wj6i2vAsY9s",
+      "rarible homepage interface",
+    ],
+    [
+      "QmRVBtbrq9p9Hs1P4NXPpGbTa3rqgEXJAUkVDUk9DinKPp",
       "video player gallery",
     ],
   ];
