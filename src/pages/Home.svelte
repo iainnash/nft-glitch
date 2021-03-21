@@ -6,10 +6,10 @@
       "Qmedce7YGoULTfyx6WLZN6D1DbGVUogPGR3FrcsNiYYRbJ",
       "foundation page as jstn hires theme",
     ],
-    [
-      "QmTJ9E2vvh6npJxEThTZRF51VMXMLc39pk8t8oTzk6cvRS",
-      "rarible bois and gurls mashup",
-    ],
+    // [
+    //   "QmTJ9E2vvh6npJxEThTZRF51VMXMLc39pk8t8oTzk6cvRS",
+    //   "rarible bois and gurls mashup",
+    // ],
     [
       "bafkreifb2trdatysz2ppnaob6zevvjkul453tic3xgqbu735v6k6h6cwvi",
       "flatuance opensea nft example",
@@ -58,7 +58,7 @@
     this project brings back those vibes for web 3.0. write some html(ish) and
     styles to show off your works in your own style. the platform is <sup>f</sup
     >re<sub>e</sub> and outputs decentralized webpages that live on IPFS. want to
-    take your gallery to the next level? you can put it on zora!
+    take your gallery to the next level? you can put it on zora! (such as <a href="https://zora.co/zzz/2387">zora on zora</a>).
   </p>
   <p>
     we currently support either purchased or created media from foundation,

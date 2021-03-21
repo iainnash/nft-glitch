@@ -12,7 +12,7 @@
       if (currentRoute.namedParams.cid) {
         const page = await fetch(`https://ipfs.io/ipfs/${cid}`);
         const responseText = await page.text();
-        const marker = "<!--" + SEPERATOR_STRING;
+        const marker = SEPERATOR_STRING;
         const pageData = responseText.slice(
           responseText.indexOf(marker) + marker.length
         );
