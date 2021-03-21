@@ -31,6 +31,7 @@
       "video player gallery",
     ],
   ];
+
 </script>
 
 <div class="home">
