@@ -6,10 +6,10 @@
       "Qmedce7YGoULTfyx6WLZN6D1DbGVUogPGR3FrcsNiYYRbJ",
       "foundation page as jstn hires theme",
     ],
-    // [
-    //   "QmTJ9E2vvh6npJxEThTZRF51VMXMLc39pk8t8oTzk6cvRS",
-    //   "rarible bois and gurls mashup",
-    // ],
+    [
+      "Qmcup1ADQmBF5bVe9kejsAuGMq98q9xDLevjkEJyk2JWpw",
+      "rarible bois and gurls morphing gallery",
+    ],
     [
       "bafkreifb2trdatysz2ppnaob6zevvjkul453tic3xgqbu735v6k6h6cwvi",
       "flatuance opensea nft example",
