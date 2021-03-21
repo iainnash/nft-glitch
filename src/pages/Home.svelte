@@ -16,7 +16,7 @@
     ],
     [
       "bafybeiehtzdihujzw746ffz7ykgl6e62bxpjsiy3um5q4o4tjqhgqxvfp4",
-      "zora as a foundation gallery",
+      "zora stylized gallery",
     ],
     [
       "QmVVBMkFiW1M57vUhdTVHx8izzDMAGDkPv7Wj6i2vAsY9s",
