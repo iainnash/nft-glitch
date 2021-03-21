@@ -1,64 +1,24 @@
-# svelte app
+## NFTGlitch
 
-This is a project template for [Svelte](https://svelte.dev) apps. It lives at https://github.com/sveltejs/template-webpack.
+Make web 1.0 webpages in web 3.0 style – integrate the decentralized NFT ecosystems into your own style. Fetch NFTs from platforms, call organized external APIs, and animate the webpage too for more fun.
 
-To create a new project based on this template using [degit](https://github.com/Rich-Harris/degit):
+see nft-glitch at https://nftglitch.vercel.app/
 
-```bash
-npx degit sveltejs/template-webpack svelte-app
-cd svelte-app
-```
+nftglitch harkens back to the days when the web was yours to mash up and to play with.
 
-*Note that you will need to have [Node.js](https://nodejs.org) installed.*
+This tool helps build IPFS-backed decentralized NFT galleries. Unlike decentraland or many NFT platforms currently it just provides a common JSON object with platform-level specific fields for more information that lets you slice and dice your NFTs as you see fit.
 
+The project renders a static HTML page with a javascript file that loads once the page is loaded: even is external APIs do not exist anymore, their state is rendered and preserved in the document uploaded to IPFS. It includes the source code for the render at the bottom of the webpage allowing for decentralized forking and editing of projects.
 
-## Get started
+The tool supports forking any existing pages by simply navigating to it IPFS URL.
 
-Install the dependencies...
-
-```bash
-cd svelte-app
-npm install
-```
-
-...then start webpack:
-
-```bash
-npm run dev
-```
-
-Navigate to [localhost:8080](http://localhost:8080). You should see your app running. Edit a component file in `src`, save it, and the page should reload with your changes.
+After you publish a project to IPFS, you can then mint the page as a Zora NFT using the built-in minter tool.
 
 
-## Deploying to the web
 
-### With [now](https://zeit.co/now)
+This project integrates many helpers and urls to standardize NFTs across many platforms into a simple to use format and exposes many helper functions.
 
-Install `now` if you haven't already:
+These tools utilize APIs and decentralized portals such as the ability to resolve the platform and bid information along with generic NFT information.
 
-```bash
-npm install -g now
-```
+Based off pre-existing templates, users can show of their NFTs simply by publishing a copy of an existing page and updating their address or ENS name that resolves to their records.
 
-Then, from within your project folder:
-
-```bash
-now
-```
-
-As an alternative, use the [Now desktop client](https://zeit.co/download) and simply drag the unzipped project folder to the taskbar icon.
-
-### With [surge](https://surge.sh/)
-
-Install `surge` if you haven't already:
-
-```bash
-npm install -g surge
-```
-
-Then, from within your project folder:
-
-```bash
-npm run build
-surge public
-```
