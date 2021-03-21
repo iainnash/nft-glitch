@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
   const page = await pageRequest.text();
 
   const metadataJSON = generateMetadata("zora-20210101", {
-    description: [description, `View gallery: https://ipfs.io/ipfs/${htmlHash}`].join("\n"),
+    description: [description, ` view: https://ipfs.io/ipfs/${htmlHash}`].join("\n"),
     mimeType: "text/html",
     name,
     version: "zora-20210101",
