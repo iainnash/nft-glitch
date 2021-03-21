@@ -17,6 +17,9 @@ async function ipfsHandlerSavePage(pageContent) {
 
 
 module.exports = async (req, res) => {
+  if (req.method !== 'POST') {
+    res.send('');
+  }
   const { description, name, htmlHash } = req.body;
 
   const pageRequest = await fetch(`https://ipfs.io/ipfs/${htmlHash}`);
