@@ -5,8 +5,10 @@ const api_key = process.env.PINATA_API_KEY;
 const api_secret = process.env.PINATA_API_SECRET;
 
 module.exports = async (req, res) => {
+  console.log('method', req.method);
   if (req.method !== 'POST') {
     res.send('');
+    return;
   }
   const { data, name, author } = req.body;
   if (!data || !name) {

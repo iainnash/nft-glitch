@@ -11,6 +11,7 @@ async function ipfsHandlerSavePage(pageContent) {
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     res.send('');
+    return;
   }
   console.log('TOKEN', token);
     const { data, name } = req.body;
