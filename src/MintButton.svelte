@@ -40,7 +40,7 @@
     });
     const metaResponse = await metaHash.json();
 
-    const zora = new Zora(provider.getSigner(), 4);
+    const zora = new Zora(provider.getSigner(), network.chainId);
 
     // if (!metaResponse.isVerified) {
     //   alert('internal verification error ~~ sad');

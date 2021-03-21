@@ -19,10 +19,11 @@ async function ipfsHandlerSavePage(pageContent) {
 module.exports = async (req, res) => {
   const { description, name, htmlHash } = req.body;
 
-  const page = await fetch(`https://ipfs.io/ipfs/${htmlHash}`);
+  const pageRequest = await fetch(`https://ipfs.io/ipfs/${htmlHash}`);
+  const page = await pageRequest.text();
 
   const metadataJSON = generateMetadata("zora-20210101", {
-    description: [description, `View page: https://ipfs.io/ipfs/${htmlHash}`].join("\n"),
+    description: [description, `View gallery: https://ipfs.io/ipfs/${htmlHash}`].join("\n"),
     mimeType: "text/html",
     name,
     version: "zora-20210101",
@@ -30,7 +31,7 @@ module.exports = async (req, res) => {
 
   const metadataCid = await ipfsHandlerSavePage(metadataJSON);
 
-  const contentHash = sha256FromBuffer(page.arrayBuffer());
+  const contentHash = sha256FromBuffer(Buffer.from(page));
   const metadataHash = sha256FromBuffer(Buffer.from(metadataJSON));
   const mediaData = constructMediaData(
     `https://ipfs.io/ipfs/${htmlHash}`,

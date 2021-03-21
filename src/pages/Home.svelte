@@ -2,11 +2,30 @@
   import { Navigate } from "svelte-router-spa";
 
   let templates = [
-    ["bafkreic4uu7m35po6tl25kkfetsphs7o5dbmsx7ybo7w623qtgxsxdinb4", "foundation page as jstn hires theme"],
-    ["bafkreifb2trdatysz2ppnaob6zevvjkul453tic3xgqbu735v6k6h6cwvi", "flatuance opensea nft example"],
-    ["bafkreibzenjj2htnfr2drromgbojeshf6n3z4744zhkyvqwzb4rpyw7aly", "a kitchen sink gallery"],
-    ["", "foundation as a zora gallery"],
-    ["", "zora as a foundation gallery"],
+    [
+      "bafkreic4uu7m35po6tl25kkfetsphs7o5dbmsx7ybo7w623qtgxsxdinb4",
+      "foundation page as jstn hires theme",
+    ],
+    [
+      "bafkreifb2trdatysz2ppnaob6zevvjkul453tic3xgqbu735v6k6h6cwvi",
+      "flatuance opensea nft example",
+    ],
+    [
+      "bafkreibzenjj2htnfr2drromgbojeshf6n3z4744zhkyvqwzb4rpyw7aly",
+      "a kitchen sink gallery",
+    ],
+    [
+      "bafybeiehtzdihujzw746ffz7ykgl6e62bxpjsiy3um5q4o4tjqhgqxvfp4",
+      "zora as a foundation gallery",
+    ],
+    [
+      "QmVVBMkFiW1M57vUhdTVHx8izzDMAGDkPv7Wj6i2vAsY9s",
+      "superrare homepage interface",
+    ],
+    [
+      "bafybeiewpa7pllgwmkxl4puizo2j3ozxkkzzvlrp4ma3ni7osna2aj3j7a",
+      "video player gallery",
+    ],
   ];
 </script>
 
@@ -27,13 +46,15 @@
     bringing them back for the new internet rennisance
   </p>
   <p>
-    this project brings back those vibes for web 3.0. write some html(ish) and styles to show off your works in your own style.
-    the platform is <sup>f</sup>re<sub>e</sub> and outputs decentralized webpages that live on IPFS.
-    want to take your gallery to the next level? you can put it on zora!
+    this project brings back those vibes for web 3.0. write some html(ish) and
+    styles to show off your works in your own style. the platform is <sup>f</sup
+    >re<sub>e</sub> and outputs decentralized webpages that live on IPFS. want to
+    take your gallery to the next level? you can put it on zora!
   </p>
   <p>
-    we currently support either purchased or created media from foundation, rarible, opensea, and zora.
-    client-side async fetch() is supported for adding your own data sources.
+    we currently support either purchased or created media from foundation,
+    rarible, opensea, and zora. client-side async fetch() is supported for
+    adding your own data sources.
   </p>
 
   <h3>how do i get started!</h3>
@@ -56,9 +77,9 @@
       </ul>
     </div>
     <div class="desc">
-<h4>media description object</h4>
-    <pre
-      class="block">{`
+      <h4>media description object</h4>
+      <pre
+        class="block">{`
         {
             "info": {(direct data from platform, can use {JSON.stringify(info)} to inspect)},
             "media": {
@@ -76,6 +97,10 @@
     `}
       </pre>
     </div>
+    <footer>
+      made by <a href="https://twitter.com/isiain">iain</a> // a nfthack project
+      :)
+    </footer>
   </div>
 </div>
 
@@ -88,9 +113,9 @@
     padding: 2px;
   }
   .examples li {
-      margin: 6px 0;
+    margin: 6px 0;
   }
-  .button {
+  :global(.button a) {
     font-size: 3vw;
     text-decoration: none;
   }
@@ -108,12 +133,12 @@
     font-size: 1.6em;
   }
   h2,
-  .button {
+  :global(.button a) {
     background: red;
     background: -webkit-linear-gradient(
       left,
-      orange,
-      yellow,
+      rgb(184, 120, 2),
+      rgb(105, 105, 59),
       green,
       cyan,
       blue,
@@ -121,8 +146,8 @@
     );
     background: -o-linear-gradient(
       right,
-      orange,
-      yellow,
+      rgb(184, 120, 2),
+      rgb(105, 105, 59),
       green,
       cyan,
       blue,
@@ -130,8 +155,8 @@
     );
     background: -moz-linear-gradient(
       right,
-      orange,
-      yellow,
+      rgb(184, 120, 2),
+      rgb(105, 105, 59),
       green,
       cyan,
       blue,
@@ -139,8 +164,8 @@
     );
     background: linear-gradient(
       to right,
-      orange,
-      yellow,
+      rgb(184, 120, 2),
+      rgb(105, 105, 59),
       green,
       cyan,
       blue,

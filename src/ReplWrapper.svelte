@@ -64,15 +64,16 @@
 
   async function handleIPFSClick() {
     const previewPage = document.querySelector('iframe[title="Result"]').contentDocument;
+    const title = prompt("Name your masterpiece!");
     const toSave = GeneratedPage
       .replace('{JSONEND}', SEPERATOR_STRING+JSON.stringify(window.currentEditor))
       .replace('{CONTENT}', previewPage.body.innerHTML)
       .replace('{SCRIPT}', pageScript)
-      .replace('{PAGE_TITLE}', prompt("Name your masterpiece!"))
+      .replace('{PAGE_TITLE}', title.replace(/[<>]/g, ''))
       .replace('{STYLES}', previewPage.getElementsByTagName('style')[0].innerHTML)
     console.log('saving page', toSave);
-    const { cid } = await ipfsHandlerSavePage(toSave);
-    navigateTo(`/v/${cid}`);
+    const { data } = await ipfsHandlerSavePage(toSave, title);
+    navigateTo(`/published/${data.IpfsHash}`);
   }
 
   onMount(() => {

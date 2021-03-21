@@ -6,15 +6,16 @@
 <div class="full">
   <h2>congrats! 🎉</h2>
   <h3>✔ you're published on IPFS</h3>
+  <h3>share w/ friends <input type="text" value={window.location.href.replace('/published/', '/v/')} /></h3>
 
-  <PreviewPage cid={currentRoute.namedParams.cid} />
+  <PreviewPage buy={true} cid={currentRoute.namedParams.cid} />
 </div>
 
 <style>
   .full {
     text-align: center;
     margin-top: 20px;
-    min-height: 100%;
+    height: 100%;
     font-size: 1.9em;
   }
 </style>
